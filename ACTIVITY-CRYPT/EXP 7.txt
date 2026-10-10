@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <wchar.h>
+#include <locale.h>
+
+int main(void) {
+    wchar_t cipher[2000];
+    wchar_t symbols[128];
+    int count[128] = {0};
+    int n = 0, i, j;
+
+    setlocale(LC_ALL, "");
+
+    wprintf(L"Enter ciphertext:\n");
+
+    if (fgetws(cipher, 2000, stdin) == NULL)
+        return 1;
+
+    for (i = 0; cipher[i] != L'\0'; i++) {
+        if (cipher[i] == L'\n' || cipher[i] == L'\r')
+            continue;
+
+        for (j = 0; j < n; j++) {
+            if (symbols[j] == cipher[i])
+                break;
+        }
+
+        if (j == n && n < 128) {
+            symbols[n] = cipher[i];
+            count[n] = 0;
+            n++;
+        }
+
+        if (j < 128)
+            count[j]++;
+    }
+
+    wprintf(L"\nSymbol frequencies:\n");
+
+    for (i = 0; i < n; i++)
+        wprintf(L"%lc : %d\n", symbols[i], count[i]);
+
+    return 0;
+}
