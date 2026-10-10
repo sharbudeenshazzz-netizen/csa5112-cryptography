@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char text[300], key[100];
+    int i, j = 0, klen;
+
+    printf("Enter plaintext: ");
+    fgets(text, sizeof(text), stdin);
+
+    printf("Enter keyword: ");
+    scanf("%99s", key);
+
+    klen = strlen(key);
+
+    for (i = 0; i < klen; i++) {
+        if (!isalpha((unsigned char)key[i])) {
+            printf("Keyword must contain letters only.\n");
+            return 1;
+        }
+        key[i] = toupper((unsigned char)key[i]);
+    }
+
+    for (i = 0; text[i] != '\0'; i++) {
+        if (isalpha((unsigned char)text[i])) {
+            char base = isupper((unsigned char)text[i])
+                        ? 'A' : 'a';
+            int p = toupper((unsigned char)text[i]) - 'A';
+            int k = key[j % klen] - 'A';
+
+            text[i] = (p + k) % 26 + base;
+            j++;
+        }
+    }
+
+    printf("Ciphertext: %s", text);
+    return 0;
+}

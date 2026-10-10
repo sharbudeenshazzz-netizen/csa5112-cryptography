@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char text[200];
+    int k, i;
+
+    printf("Enter plaintext: ");
+    fgets(text, sizeof(text), stdin);
+
+    printf("Enter key (1-25): ");
+    scanf("%d", &k);
+
+    if (k < 1 || k > 25) {
+        printf("Invalid key!\n");
+        return 1;
+    }
+
+    for (i = 0; text[i] != '\0'; i++) {
+        if (isalpha((unsigned char)text[i])) {
+            char base = isupper((unsigned char)text[i]) ? 'A' : 'a';
+            text[i] = (text[i] - base + k) % 26 + base;
+        }
+    }
+
+    printf("Ciphertext: %s", text);
+    return 0;
+}
